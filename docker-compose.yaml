@@ -29,7 +29,6 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
-
     depends_on:
       - db
     volumes:
@@ -41,9 +40,31 @@ services:
         ipv4_address: 192.168.112.3
     ports:
       - "8899:80"
+  
+  mqtt:
+    build: 
+      context: mqtt
+    container_name: floodmqtt
+    volumes:
+      - emqxlog:/opt/emqx/log
+      - emqxdata:/opt/emqx/data
+    networks:
+      db-api-net:
+        ipv4_address: 192.168.112.4
+    ports:
+      - "1883:1883"
+      - "8083:8083"
+      - "8084:8084"
+      - "8883:8883"
+      - "11883:11883"
+      - "18083:18083"
+      - "4370:4370"
+      - "5369:5369"
 
 volumes:
   mongodb:
+  emqxlog:
+  emqxdata:
 
 networks:
   db-api-net:
